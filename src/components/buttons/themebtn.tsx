@@ -21,7 +21,7 @@ const ThemeBTN = () => {
         setTheme(systemTheme);
         
         setMounted(true);
-    }, [])
+    }, [theme, setTheme])
     
     // if (mounted) {return null;}
 
