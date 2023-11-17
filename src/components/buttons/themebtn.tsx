@@ -1,34 +1,9 @@
 "use client";
 
-import {useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
 const ThemeBTN = () => {
-
-    const [systemTheme , setSystemTheme] = useState("light");
-
-      
     const { theme, setTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
-
-
-    useEffect(() => {
-        if (typeof window !== 'undefined' && window !== undefined) {
-            // 👉️ can use window here
-            setSystemTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-        }
-        
-        setTheme(systemTheme);
-        
-        setMounted(true);
-    }, [theme, setTheme])
-    
-    // if (mounted) {return null;}
-
-    const currentTheme = theme === 'system' ? systemTheme : theme;
-
-    console.log(theme);
-  
     return (
         <button 
             onClick={() => theme == "dark"? setTheme('light'): setTheme("dark")}
