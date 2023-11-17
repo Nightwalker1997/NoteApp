@@ -4,7 +4,13 @@ import {useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
 const ThemeBTN = () => {
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+    const [systemTheme , setSystemTheme] = useState("light");
+    if (typeof window !== 'undefined') {
+        // 👉️ can use window here
+        setSystemTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+      
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
