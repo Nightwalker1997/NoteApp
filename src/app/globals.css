@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -24,4 +24,18 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+} 
+*/
+
+
+.btn{
+    @apply py-1 px-3 my-1 mx-2 border-spacing-1 text-black rounded-full bg-gray-200;
+}
+
+
+table th{
+    @apply border-2 py-1 px-3;
+}
+table td{
+    @apply border-2 py-1 px-3 h-1 text-center;
 }
