@@ -13,7 +13,7 @@ const ThemeBTN = () => {
 
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && window !== undefined) {
             // 👉️ can use window here
             setSystemTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
         }
