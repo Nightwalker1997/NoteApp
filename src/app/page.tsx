@@ -1,5 +1,4 @@
 import ThemeBTN from '@/components/buttons/themebtn'
-import AddModal from '@/components/buttons/Add';
 
 export default function Home() {
     return (
@@ -13,7 +12,6 @@ export default function Home() {
                     </svg>
                 </button>
 
-                <AddModal />
                 <ThemeBTN />
     
             </div>
