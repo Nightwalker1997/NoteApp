@@ -19,7 +19,7 @@ const ThemeBTN = () => {
         
         setTheme(systemTheme);
         
-    }, [theme])
+    }, [])
     
 
     const currentTheme = theme === 'system' ? systemTheme : theme;
