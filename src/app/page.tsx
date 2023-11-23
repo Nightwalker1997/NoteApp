@@ -1,12 +1,13 @@
 import ThemeBTN from '@/components/buttons/themebtn';
 import AddModals from '@/components/modals/addModals';
-import RegLog from '@/components/modals/user/register_login';
-import PagintionControl from '@/components/buttons/Pagination'
+
+import RegLog from '../components/modals/user/register_login';
+import PagintionControl from '../components/buttons/Pagination'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import NoteData from '@/data/note';
+import NoteData from '../data/note';
 
 export default function Home(
     {
