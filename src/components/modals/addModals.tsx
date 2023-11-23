@@ -1,14 +1,16 @@
 "use client";
 import { useState } from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
+
 const AddModals = () => {
     const [ AddModalVisible, setAddModalVisible ] = useState<boolean>(false);
     
     return (<>
         <button type='button' title='Add Note' className="btn" onClick={(e) =>{setAddModalVisible(true)}}>
-            <svg className='w-6' aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
+            <FontAwesomeIcon icon={faPlus} />
         </button>
         {   
             AddModalVisible 
