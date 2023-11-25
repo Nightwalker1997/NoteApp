@@ -2,7 +2,6 @@
 
 import {FC} from 'react';
 
-import NoteData from '@/data/note';
 
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -45,7 +44,7 @@ const PagintionControl : FC<pageProps> = ({
                     
                     <li>
                         <a aria-current="page" className="Pagitination_btn_current">
-                            {page}
+                            {page <= 1 ? 1 : page}
                         </a>
                     </li>
                     
