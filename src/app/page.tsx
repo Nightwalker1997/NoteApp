@@ -3,30 +3,10 @@ import AddModals from '@/components/modals/addModals';
 
 import RegLog from '@/components/modals/user/register_login';
 import PagintionControl from '@/components/buttons/pagination';
-import NoteData from '@/data/note';
-
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-
-import { headers } from 'next/headers';
+import DeleteBTN from '@/components/buttons/deletebtn';
 
 const getNotes = async () => {
     try {
-        
-        // console.log("headersList: ", { headersList });
-        // console.log("Domin: ", headersList.get('host'));
-        // console.log("Refere: ", headersList.get('referer'));
-        // console.log("URL: ", headersList.get('next-url'));
-        // console.log("user-agent: ", headersList.get('user-agent'));
-        // console.log("content-type: ", headersList.get('content-type'));
-        // console.log("x-access-token: ", headersList.get('x-access-token'));
-        //console.log("authorization: ", headersList.get('authorization'));
-        // const headersList = headers();
-        // const Refere = headersList.get('referer') || 'http://localhost:3000';
-        // const URL = headersList.get('next-url') || '';
-        // const HostAdress = Refere.replace(URL, '')
-
         const res = await fetch(`${process.env.NOTE_BASE_URL}/api/notes` , {method: "GET", cache: "no-store"});
         if(!res.ok) throw new Error("failed to fetch notes");
         return res.json();
@@ -46,7 +26,7 @@ export default async function Home(
     })
 {
     
-    const {Notes} = await getNotes() ?? [];
+    const {Notes} = await getNotes();
 
     const perPage = 10;
 
@@ -55,6 +35,7 @@ export default async function Home(
     const start = (Number(page) - 1) * perPage;
     const end = start + perPage;
     
+    if(!Notes) return <div>Loading ...</div>;
     return (
         <main className="mt-6">
             <div className="flex justify-around">
@@ -83,46 +64,54 @@ export default async function Home(
                         </tr>
                     </thead>
                     <tbody>
-                        {Notes.map((Note: any, index: number) => {
-                            return(<tr key={Note._id}>
-                            <td>
-                                {index + 1}
-                            </td>
-                            <td>
-                                {Note.title}
-                            </td>
-                            <td>
-                                <p className="truncate w-11/12">
-                                    {Note.description}
-                                </p>
-                            </td>
-                            <td>
-                                {Note.createdAt}
-                            </td>
-
-                            <td 
-                                className="inline-flex items-center hover:cursor-pointer hover:text-red-500"
-                                // onClick={() => {
-                                //     console.log("DELETED: ", _id);
-
-                                // }}
-                            >
-                                <FontAwesomeIcon icon={faTrash} />
-                            </td>
-
-                        </tr>);})}
                         
-                   
+                        {Notes 
+                            ? 
+                            Notes.map((Note: any, index: number) => {
+                                return(<tr key={Note._id}>
+                                <td>
+                                    {index + 1}
+                                </td>
+                                <td>
+                                    {Note.title}
+                                </td>
+                                <td>
+                                    <p className="truncate w-11/12">
+                                        {Note.description}
+                                    </p>
+                                </td>
+                                <td>
+                                    {Note.createdAt}
+                                </td>
+
+                                <td 
+                                    className="inline-flex items-center hover:cursor-pointer hover:text-red-500"
+
+                                >
+                                    <DeleteBTN _id={Note._id} />
+                                </td>
+
+                            </tr>)})
+                            :
+                            null    
+                        }      
+                        
                     </tbody>
                 </table>
             </div>    
+            {
+                Notes.length >= 10 
+                ? 
+                    <PagintionControl 
+                        hasNextPage = {end < Notes.length} 
+                        hasPerviousPage = {start > 0}
+                        DataLength = {Notes.length}
+                        perPage={perPage}
+                    />
+                : 
+                    null
+            }
             
-            <PagintionControl 
-                hasNextPage = {end < NoteData.length} 
-                hasPerviousPage = {start > 0}
-                DataLength = {NoteData.length}
-                perPage={perPage}
-            />
         </main>
   )
 }

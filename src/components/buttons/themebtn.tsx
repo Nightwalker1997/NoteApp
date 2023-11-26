@@ -23,12 +23,9 @@ const ThemeBTN = () => {
         
         setTheme(systemTheme);
         
-    }, [])
+    }, [systemTheme, setSystemTheme, setTheme])
     
 
-    const currentTheme = theme === 'system' ? systemTheme : theme;
-
-    console.log(theme);
   
     return (
         <button 
