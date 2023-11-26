@@ -21,14 +21,13 @@ const getNotes = async () => {
         // console.log("user-agent: ", headersList.get('user-agent'));
         // console.log("content-type: ", headersList.get('content-type'));
         // console.log("x-access-token: ", headersList.get('x-access-token'));
-        // console.log("authorization: ", headersList.get('authorization'));
-        
-        const headersList = headers();
-        const Refere = headersList.get('referer') || 'http://localhost:3000';
-        const URL = headersList.get('next-url') || '';
-        const HostAdress = Refere.replace(URL, '')
+        //console.log("authorization: ", headersList.get('authorization'));
+        // const headersList = headers();
+        // const Refere = headersList.get('referer') || 'http://localhost:3000';
+        // const URL = headersList.get('next-url') || '';
+        // const HostAdress = Refere.replace(URL, '')
 
-        const res = await fetch(`${HostAdress}/api/notes` , {method: "GET", cache: "no-store"});
+        const res = await fetch(`${process.env.NOTE_BASE_URL}/api/notes` , {method: "GET", cache: "no-store"});
         if(!res.ok) throw new Error("failed to fetch notes");
         return res.json();
 
@@ -84,21 +83,21 @@ export default async function Home(
                         </tr>
                     </thead>
                     <tbody>
-                        {Notes.map(({_id, title, description, createdAt}: {_id:string, title:string, description:string, createdAt:string}, index: number) => {
-                            return(<tr key={_id}>
+                        {Notes.map((Note: any, index: number) => {
+                            return(<tr key={Note._id}>
                             <td>
                                 {index + 1}
                             </td>
                             <td>
-                                {title}
+                                {Note.title}
                             </td>
                             <td>
                                 <p className="truncate w-11/12">
-                                    {description}
+                                    {Note.description}
                                 </p>
                             </td>
                             <td>
-                                {createdAt}
+                                {Note.createdAt}
                             </td>
 
                             <td 
