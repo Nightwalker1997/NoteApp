@@ -25,7 +25,7 @@ const DeleteBTN : FC<Props> = ({_id}) => {
     };
 
     return(
-        <span>
+        <span className="cursor-pointer">
             <FontAwesomeIcon 
                 icon={faTrash} 
                 onClick={() => {

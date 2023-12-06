@@ -2,7 +2,9 @@
 import { FC, 
          useState, 
          MouseEvent }   from 'react';
-import validator        from 'validator';
+
+//type error fixed by changing import statements to require:
+const validator  = require('validator');
 
 interface Config{
     setForgotModalVisible: (params: any) => any,
