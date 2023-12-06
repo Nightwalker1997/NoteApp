@@ -1,10 +1,11 @@
 "use client";
 
-import {useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { useState, 
+         useEffect }        from "react";
+import { useTheme }         from "next-themes";
+import { FontAwesomeIcon }  from '@fortawesome/react-fontawesome';
+import { faMoon, 
+         faSun }            from '@fortawesome/free-solid-svg-icons';
 
 
 const ThemeBTN = () => {

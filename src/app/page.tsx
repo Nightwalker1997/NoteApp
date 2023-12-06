@@ -1,117 +1,54 @@
-import ThemeBTN from '@/components/buttons/themebtn';
-import AddModals from '@/components/modals/addModals';
+import { getServerSession } from 'next-auth/next';
+import { options }          from "./api/auth/[...nextauth]/options";
+import Navbar               from '@/components/navbar';
+import NoteTable            from '@/components/NoteTable';
+import ConnectMongoDB       from '@/mongo';
+import Note                 from "@/models/note";
 
-import RegLog from '@/components/modals/user/register_login';
-import PagintionControl from '@/components/buttons/pagination';
-import DeleteBTN from '@/components/buttons/deletebtn';
+// const getNotes = (email: string) => {
+//     try {
+//         const res = fetch(process.env.NOTE_BASE_URL + '/api/notes' , 
+//         {
+//             method: "GET", 
+//             cache: "no-store"
+//         }).then(response => response.json())
+//         .catch(error => console.log(error));
 
-const getNotes = async () => {
-    try {
-        const res = await fetch(`${process.env.NOTE_BASE_URL}/api/notes` , {method: "GET", cache: "no-store"});
-        if(!res.ok) throw new Error("failed to fetch notes");
-        return res.json();
+//         return res;
 
-    }catch(e) {
-        console.error("fetching data error: ", e);
-    }
-}
+//     }catch(e) {
+//         console.error("fetching data error: ", e);
+//     }
+// }
 
-export default async function Home(
-    {
-        searchParams
-    }: 
-    {  
-        searchParams : {
-            [key: string]: string | string[] | undefined}
-    })
-{
+export default async function Home(){
+    const session = await getServerSession(options);    
     
-    const {Notes} = await getNotes();
+    const user = session?.user;
 
-    const perPage = 10;
+    await ConnectMongoDB();
+    const Notes = await Note.find({userEmail: user?.email});
 
-    const page = searchParams['page'] ?? '1';
 
-    const start = (Number(page) - 1) * perPage;
-    const end = start + perPage;
-    
-    if(!Notes) return <div>Loading ...</div>;
     return (
         <main className="mt-6">
-            <div className="flex justify-around">
-                <RegLog />
-            
-                <AddModals />
-
-
-                <ThemeBTN />
-    
-            </div>
-            
-
-            <hr className="h-px my-4 bg-gray-100 border-0" />
-        
-            <div className="flex justify-center">
-
-                <table className="table-fixed">
-                    <thead>
-                        <tr>
-                            <th>row</th>
-                            <th>title</th>
-                            <th>note</th>
-                            <th>date</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                        {Notes 
-                            ? 
-                            Notes.map((Note: any, index: number) => {
-                                return(<tr key={Note._id}>
-                                <td>
-                                    {index + 1}
-                                </td>
-                                <td>
-                                    {Note.title}
-                                </td>
-                                <td>
-                                    <p className="truncate w-11/12">
-                                        {Note.description}
-                                    </p>
-                                </td>
-                                <td>
-                                    {Note.createdAt}
-                                </td>
-
-                                <td 
-                                    className="inline-flex items-center hover:cursor-pointer hover:text-red-500"
-
-                                >
-                                    <DeleteBTN _id={Note._id} />
-                                </td>
-
-                            </tr>)})
-                            :
-                            null    
-                        }      
-                        
-                    </tbody>
-                </table>
-            </div>    
-            {
-                Notes.length >= 10 
-                ? 
-                    <PagintionControl 
-                        hasNextPage = {end < Notes.length} 
-                        hasPerviousPage = {start > 0}
-                        DataLength = {Notes.length}
-                        perPage={perPage}
-                    />
-                : 
-                    null
+            {session ? 
+                <Navbar user={session?.user} />
+            :
+                <h1>YOU SHALL NOT PASS.</h1>
             }
             
+            {Notes.length > 0 
+                    ?
+                        <NoteTable Notes={Notes} />
+                    :
+                        <div className="text-center text-lg underline justify-center text-red-300 text-semibold">
+                            You need to add a Note.
+                        </div>
+           }
+
+            <h1 className="text-center text-3xl">Welcome</h1>
+                
         </main>
   )
 }

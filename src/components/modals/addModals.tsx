@@ -1,25 +1,36 @@
 "use client";
 
 import { useState, MouseEvent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useRouter } from 'next/navigation';
+import { FontAwesomeIcon }      from '@fortawesome/react-fontawesome';
+import { faPlus }               from '@fortawesome/free-solid-svg-icons';
+import { useRouter, redirect }  from 'next/navigation'; 
+import { useSession }           from "next-auth/react"
 
 const AddModals = () => {
-    const [ AddModalVisible, setAddModalVisible ] = useState<boolean>(false);
-    
-    const [ title, setTitle ] = useState<string>();
-    const [ description, setDescription ] = useState<string>();
-    const [ alert, setAlert ] = useState<boolean>(false);
+    const {data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect("/api/auth/signin?callbackUrl");
+        },
+    });
+
+    const [ AddModalVisible , setAddModalVisible ]   = useState<boolean>(false);
+    const [ title           , setTitle ]             = useState<string>();
+    const [ description     , setDescription ]       = useState<string>();
+    const [ alert           , setAlert ]             = useState<boolean>(false);
 
     const router = useRouter();
 
     const handleSubmit = async (e: MouseEvent<HTMLElement>) => {
         e.preventDefault();
+
+        const userEmail = session?.user?.email ?? "gholamreaz@gmail.com";   
+        
         if(!title || !description){
             setAlert(true);
         }
-        console.log("address: ", process.env.NEXT_PUBLIC_NOTE_BASE_URL + "/api/notes");
+        console.info("client side: ", title, description, userEmail, "url: ", process.env.NEXT_PUBLIC_NOTE_BASE_URL);
+
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_NOTE_BASE_URL + "/api/notes", {
                 method: "POST",
@@ -27,24 +38,26 @@ const AddModals = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    userId: "1", 
-                    title, 
+                    userEmail, 
+                    title,
                     description
                 })
             })
-            console.log("response: ", res);
+            
+            console.log("client side response: " + res);
+
             if (res.ok) {
                 setAddModalVisible(false);
-                
                 router.refresh();
                 
             }else{
-                throw new Error("Failed to add Note!!")
+                throw new Error("client side: Failed to add Note!!")
             }
         }catch (error){
-            console.error("Error: ", error);
+            console.error("client side Error: ", error);
         }
     }
+
 
     return (<>
         <button type='button' title='Add Note' className="btn" onClick={(e) =>{setAddModalVisible(true)}}>
@@ -84,6 +97,7 @@ const AddModals = () => {
                                         onChange={(e => {
                                             setTitle(e.target.value);
                                         })}
+                                        autoFocus={true}
                                     />
                                 </div>
                                 <div className="mb-4">
