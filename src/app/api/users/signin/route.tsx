@@ -2,8 +2,11 @@ import { NextRequest,
          NextResponse } from "next/server";
 import ConnectMongoDB   from "@/mongo";
 import User             from "@/models/user";
-import bcryptjs         from 'bcryptjs';
-import validator        from 'validator';
+
+//type error fixed by changing import statements to require:
+const bcryptjs   = require('bcryptjs');
+const validator  = require('validator');
+
 
 
 export async function POST(req: NextRequest, res: Response){
