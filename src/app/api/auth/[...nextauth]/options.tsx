@@ -93,7 +93,7 @@ export const options: NextAuthOptions = {
             return token;
         },
         async session({session, token}){
-            if(session?.user) session.user.role = token.role;
+            if(session?.user ) session.user.role = token.role;
             return session;
         }
     }
