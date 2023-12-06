@@ -47,8 +47,6 @@ export default async function Home(){
                         </div>
            }
 
-            <h1 className="text-center text-3xl">Welcome</h1>
-                
         </main>
   )
 }
